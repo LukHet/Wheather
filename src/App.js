@@ -6,7 +6,9 @@ const App = () => {
   const [data, setData] = useState({});
   const [city, setCity] = useState("");
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=e0784f1b0eeae9eab1bf489ae9020501&units=metric`;
+  const token = "";
+
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${token}&units=metric`;
 
   const searchCity = (e) => {
     if (e.key === "Enter") {
@@ -35,7 +37,37 @@ const App = () => {
           placeholder="Type your city..."
         />
         <div className="top">
-          <div className="temperature">{data.main ? data.main.temp : null}</div>
+          {data.main ? (
+            <>
+              <div className="cityname">{data.name}</div>
+              <div className="temperature">
+                {data.main.temp.toFixed()}&deg;C
+              </div>
+              <div className="weather">
+                <div className="description">{data.weather[0].description}</div>
+                <img
+                  alt=""
+                  src={`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`}
+                  className="icon"
+                ></img>
+              </div>
+            </>
+          ) : null}
+        </div>
+        <div className="bottom">
+          {data.main ? (
+            <>
+              <div className="humidity">
+                Humidity <div className="value">{data.main.humidity}%</div>
+              </div>
+              <div className="pressure">
+                Pressure <div className="value">{data.main.pressure}hPa</div>
+              </div>
+              <div className="wind">
+                Wind speed <div className="value">{data.wind.speed} m/s</div>
+              </div>
+            </>
+          ) : null}
         </div>
       </div>
     </div>
