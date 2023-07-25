@@ -6,7 +6,7 @@ const App = () => {
   const [data, setData] = useState({});
   const [city, setCity] = useState("");
 
-  const token = "";
+  const token = "e0784f1b0eeae9eab1bf489ae9020501";
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${token}&units=metric`;
 
@@ -64,7 +64,8 @@ const App = () => {
                 Pressure <div className="value">{data.main.pressure}hPa</div>
               </div>
               <div className="wind">
-                Wind speed <div className="value">{data.wind.speed} m/s</div>
+                Wind speed
+                <div className="value">{data.wind.speed.toFixed()} m/s</div>
               </div>
             </>
           ) : null}
