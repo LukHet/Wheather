@@ -4,9 +4,10 @@ import axios from "axios";
 
 const App = () => {
   const [weatherData, setWeatherData] = useState({});
+  const [airData, setAirData] = useState({});
+  const [forecast, setForecast] = useState([]);
   const [lattitude, setLattitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-  const [airData, setAirData] = useState({});
   const [city, setCity] = useState("");
 
   const token = "e0784f1b0eeae9eab1bf489ae9020501";
@@ -14,6 +15,8 @@ const App = () => {
   const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${token}&units=metric`;
 
   const airUrl = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lattitude}&lon=${longitude}&appid=${token}`;
+
+  const forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lattitude}&lon=${longitude}&appid=${token}&units=metric`;
 
   const searchCity = (e) => {
     if (e.key === "Enter") {
@@ -36,8 +39,31 @@ const App = () => {
           setAirData(response.data.list[0].components);
         })
         .catch((error) => console.log(error));
+
+      axios
+        .get(forecastUrl)
+        .then((response) => {
+          console.log(response.data.list);
+          setForecast(response.data.list);
+        })
+        .catch((error) => console.log(error));
     }
-  }, [weatherData, airUrl]);
+  }, [weatherData, airUrl, forecastUrl]);
+
+  const forecasts = forecast.slice(0, 9).map((forecast) => (
+    <li key={forecast.dt}>
+      <div className="forecastdate">{forecast.dt_txt.slice(0, 16)}</div>
+      <div className="forecasttemp">
+        {forecast.main.temp.toFixed()}
+        &deg;C
+      </div>
+      <img
+        alt=""
+        src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`}
+        className="icon"
+      ></img>
+    </li>
+  ));
 
   const handleChange = (e) => {
     setCity(e.target.value);
@@ -131,6 +157,7 @@ const App = () => {
             </>
           ) : null}
         </div>
+        <div className="forecasts">{forecasts}</div>
       </div>
     </div>
   );
